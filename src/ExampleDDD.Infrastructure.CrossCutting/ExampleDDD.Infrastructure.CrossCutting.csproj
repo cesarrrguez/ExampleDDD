@@ -4,4 +4,10 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ExampleDDD.Application\ExampleDDD.Application.csproj" />
+    <ProjectReference Include="..\ExampleDDD.Domain\ExampleDDD.Domain.csproj" />
+    <ProjectReference Include="..\ExampleDDD.Infrastructure.Data\ExampleDDD.Infrastructure.Data.csproj" />
+  </ItemGroup>
+
 </Project>
