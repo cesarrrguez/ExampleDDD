@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ExampleDDD.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ExampleDDD.Domain.Entities;
 using ExampleDDD.Infrastructure.Data.Context;
 
 namespace ExampleDDD.Infrastructure.Data.Mappings
@@ -26,8 +26,14 @@ namespace ExampleDDD.Infrastructure.Data.Mappings
             builder.Property(u => u.Age)
                 .IsRequired();
 
-            builder.Property(u => u.PhoneNumber)
+            // Relationships
+            builder.OwnsOne(u => u.PhoneNumber)
+                .Property(pn => pn.Number)
+                .HasColumnName("PhoneNumber")
                 .HasMaxLength(10)
+                .IsRequired();
+
+            builder.Navigation(u => u.PhoneNumber)
                 .IsRequired();
         }
     }

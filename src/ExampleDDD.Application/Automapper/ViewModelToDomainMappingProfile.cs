@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using ExampleDDD.Domain.Entities;
 using ExampleDDD.Application.ViewModels;
+using ExampleDDD.Domain.Entities;
+using ExampleDDD.Domain.ValueObjects;
 
 namespace ExampleDDD.Application.Automapper
 {
@@ -12,7 +13,7 @@ namespace ExampleDDD.Application.Automapper
                 .ForMember(u => u.Addresses, opt => opt.Ignore())
                 .ForMember(u => u.Emails, opt => opt.Ignore())
                 .ForMember(u => u.PhoneNumber, opt => opt.Ignore())
-                .ConstructUsing(u => new User(u.FirstName, u.LastName, u.Age, u.PhoneNumber))
+                .ConstructUsing(u => new User(u.FirstName, u.LastName, u.Age, new PhoneNumber(u.PhoneNumber)))
                 .AfterMap((uvm, u) =>
                 {
                     if (uvm.Addresses != null)

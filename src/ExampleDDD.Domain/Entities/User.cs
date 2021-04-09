@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ExampleDDD.Domain.Common;
+using ExampleDDD.Domain.ValueObjects;
 
 namespace ExampleDDD.Domain.Entities
 {
@@ -9,7 +10,7 @@ namespace ExampleDDD.Domain.Entities
         public string FirstName { get; }
         public string LastName { get; }
         public int Age { get; }
-        public string PhoneNumber { get; set; }
+        public PhoneNumber PhoneNumber { get; set; }
 
         private readonly List<UserAddress> _addresses;
         public IReadOnlyCollection<UserAddress> Addresses => _addresses;
@@ -20,7 +21,7 @@ namespace ExampleDDD.Domain.Entities
         // Empty constructor for EF
         protected User() { }
 
-        public User(string firstName, string lastName, int age, string phoneNumber)
+        public User(string firstName, string lastName, int age, PhoneNumber phoneNumber)
         {
             if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException(nameof(firstName));
             if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException(nameof(lastName));
@@ -28,7 +29,7 @@ namespace ExampleDDD.Domain.Entities
             FirstName = firstName;
             LastName = lastName;
             Age = age;
-            PhoneNumber = phoneNumber;
+            PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
 
             _addresses = new List<UserAddress>();
             _emails = new List<UserEmail>();
@@ -42,7 +43,7 @@ namespace ExampleDDD.Domain.Entities
             if (string.IsNullOrWhiteSpace(country)) throw new ArgumentNullException(nameof(country));
             if (string.IsNullOrWhiteSpace(zipCode)) throw new ArgumentNullException(nameof(zipCode));
 
-            var address = new UserAddress(id, street, city, state, country, zipCode, this);
+            var address = new UserAddress(id, new Address(street, city, state, country, zipCode), this);
 
             _addresses.Add(address);
         }
@@ -51,7 +52,7 @@ namespace ExampleDDD.Domain.Entities
         {
             if (string.IsNullOrWhiteSpace(emailAddress)) throw new ArgumentNullException(nameof(emailAddress));
 
-            var email = new UserEmail(id, emailAddress, this);
+            var email = new UserEmail(id, new Email(emailAddress), this);
 
             _emails.Add(email);
         }

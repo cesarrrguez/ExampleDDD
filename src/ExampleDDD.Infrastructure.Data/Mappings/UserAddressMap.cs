@@ -14,29 +14,42 @@ namespace ExampleDDD.Infrastructure.Data.Mappings
             // Primary Key
             builder.HasKey(ua => ua.Id);
 
-            // Properties
-            builder.Property(ua => ua.Street)
-                .HasMaxLength(200)
-                .IsRequired();
-
-            builder.Property(ua => ua.City)
-                .HasMaxLength(100)
-                .IsRequired();
-
-            builder.Property(ua => ua.State)
-                .HasMaxLength(50)
-                .IsRequired();
-
-            builder.Property(ua => ua.Country)
-                .HasMaxLength(50)
-                .IsRequired();
-
-            builder.Property(ua => ua.ZipCode)
-                .HasMaxLength(10)
-                .HasColumnType("varchar(10)")
-                .IsRequired();
-
             // Relationships
+            builder.OwnsOne(
+                ua => ua.Address,
+                navigationBuilder =>
+                {
+                    navigationBuilder.Property(a => a.Street)
+                        .HasColumnName("Street")
+                        .HasMaxLength(200)
+                        .IsRequired();
+
+                    navigationBuilder.Property(a => a.City)
+                        .HasColumnName("City")
+                        .HasMaxLength(100)
+                        .IsRequired();
+
+                    navigationBuilder.Property(a => a.State)
+                        .HasColumnName("State")
+                        .HasMaxLength(50)
+                        .IsRequired();
+
+                    navigationBuilder.Property(a => a.Country)
+                        .HasColumnName("Country")
+                        .HasMaxLength(50)
+                        .IsRequired();
+
+                    navigationBuilder.Property(a => a.ZipCode)
+                        .HasColumnName("ZipCode")
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .IsRequired();
+                }
+            );
+
+            builder.Navigation(ua => ua.Address)
+                .IsRequired();
+
             builder.HasOne(ua => ua.User)
                 .WithMany(ua => ua.Addresses)
                 .IsRequired();

@@ -14,12 +14,16 @@ namespace ExampleDDD.Infrastructure.Data.Mappings
             // Primary Key
             builder.HasKey(ue => ue.Id);
 
-            // Properties
-            builder.Property(ue => ue.EmailAddress)
+            // Relationships
+            builder.OwnsOne(ue => ue.Email)
+                .Property(e => e.EmailAddress)
+                .HasColumnName("Email")
                 .HasMaxLength(200)
                 .IsRequired();
 
-            // Relationships
+            builder.Navigation(ue => ue.Email)
+                .IsRequired();
+
             builder.HasOne(ue => ue.User)
                 .WithMany(ue => ue.Emails)
                 .IsRequired();
