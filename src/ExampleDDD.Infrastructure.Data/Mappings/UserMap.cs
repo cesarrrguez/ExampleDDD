@@ -26,6 +26,9 @@ namespace ExampleDDD.Infrastructure.Data.Mappings
             builder.Property(u => u.Age)
                 .IsRequired();
 
+            builder.Property(u => u.State)
+                .IsRequired();
+
             // Relationships
             builder.OwnsOne(u => u.PhoneNumber)
                 .Property(pn => pn.Number)

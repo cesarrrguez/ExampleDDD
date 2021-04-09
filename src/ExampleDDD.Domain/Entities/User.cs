@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ExampleDDD.Domain.Common;
+using ExampleDDD.Domain.Enums;
 using ExampleDDD.Domain.ValueObjects;
 
 namespace ExampleDDD.Domain.Entities
@@ -11,6 +12,7 @@ namespace ExampleDDD.Domain.Entities
         public string LastName { get; }
         public int Age { get; }
         public PhoneNumber PhoneNumber { get; set; }
+        public UserState State { get; set; }
 
         private readonly List<UserAddress> _addresses;
         public IReadOnlyCollection<UserAddress> Addresses => _addresses;
@@ -30,6 +32,8 @@ namespace ExampleDDD.Domain.Entities
             LastName = lastName;
             Age = age;
             PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
+
+            State = UserState.Registered;
 
             _addresses = new List<UserAddress>();
             _emails = new List<UserEmail>();
