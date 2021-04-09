@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ExampleDDD.Domain.Common;
 using ExampleDDD.Domain.Enums;
+using ExampleDDD.Domain.Exceptions;
 using ExampleDDD.Domain.ValueObjects;
 
 namespace ExampleDDD.Domain.Entities
@@ -27,6 +28,7 @@ namespace ExampleDDD.Domain.Entities
         {
             if (string.IsNullOrWhiteSpace(firstName)) throw new ArgumentNullException(nameof(firstName));
             if (string.IsNullOrWhiteSpace(lastName)) throw new ArgumentNullException(nameof(lastName));
+            if (age < 0) throw new InvalidUserAgeException("Invalid age of user");
 
             FirstName = firstName;
             LastName = lastName;
@@ -59,6 +61,16 @@ namespace ExampleDDD.Domain.Entities
             var email = new UserEmail(id, new Email(emailAddress), this);
 
             _emails.Add(email);
+        }
+
+        public void MarkAsActivated()
+        {
+            if (State != UserState.Registered)
+            {
+                throw new InvalidUserStateException("Can´t mark as activated a user that is not in registered state");
+            }
+
+            State = UserState.Activated;
         }
     }
 }
